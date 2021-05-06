@@ -20,7 +20,6 @@ int roserialhandler::UART0_Open() {
     //fd接受open函数返回值
     fd = open( portname, O_RDWR|O_NOCTTY|O_NDELAY);
 
-
     //判断是否打开成功，如果打开失败，输出提示，并返回-1
     if (FALSE == fd)
     {
@@ -208,8 +207,9 @@ int roserialhandler::UART0_Init(int flow_ctrl, int databits, int stopbits, int p
 }
 
 int roserialhandler::UART0_Recv(unsigned char *rcv_buf, int data_len) {
-    int len,fs_sel;
+    int fs_sel;
     fd_set fs_read;
+    ssize_t len;
 
     struct timeval time;
 
@@ -221,11 +221,10 @@ int roserialhandler::UART0_Recv(unsigned char *rcv_buf, int data_len) {
 
     //使用select实现串口的多路通信
     fs_sel = select(fd+1,&fs_read,NULL,NULL,&time);
-    //printf("fs_sel = %d\n",fs_sel);
     if(fs_sel)
     {
         len = read(fd,rcv_buf,data_len);
-        //printf("I am right!(version1.2) len = %d fs_sel = %d\n",len,fs_sel);
+       // printf("I am right!(version1.2) len = %d fs_sel = %d\n",len,fs_sel);
         return len;
     }
     else

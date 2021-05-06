@@ -43,7 +43,6 @@ struct GTIMU{
 
 
 queue<unsigned char> tembuff_1;
-queue<unsigned char> tembuff_2;
 
 void bufproc(const unsigned char *revbuff, int lenth, queue<unsigned char> tembuff, int datatype);
 void IMU_datatran(sensor_msgs::Imu &temimu, GTIMU const temimudata, ros::Time Time);
@@ -64,12 +63,6 @@ int main(int argc,char *argv[]){
     int len1;
     unsigned char rcv_buf_1[2000] = {};
 
-    //variables for port2
-    int fd2;                            //文件描述符
-    int err2;                           //返回调用函数的状态
-    int len2;
-    unsigned char rcv_buf_2[2000] = {};
-
     int counter=0;
     
     //init ros
@@ -82,27 +75,23 @@ int main(int argc,char *argv[]){
 
     roserialhandler roserial1("/dev/ttyUSB0",9600);
     fd1 = roserial1.UART0_Open();
-    // roserialhandler roserial2("/dev/ttyUSB1",115200);
-    // fd2 = roserial2.UART0_Open();
 
     do{
         err1 = roserial1.UART0_Init(0,8,1,'N');
-        //err2 = roserial2.UART0_Init(0,8,1,'N');
         printf("Set Port Exactly!\n");
         sleep(2);
-    }while(FALSE == err1 || FALSE == fd1/* || FALSE == err2 || FALSE == fd2*/);
+    }while(FALSE == err1 || FALSE == fd1);
 
-    printf("IMU_publisher starts successfully");
+    printf("IMU_publisher starts successfully\n");
 
     //loop body
     while (ros::ok()){
         len1 = roserial1.UART0_Recv( rcv_buf_1,2000);
-        if(len1 > 0){bufproc(rcv_buf_1,len1,tembuff_1,1);}
+        cout<<"len1="<<len1<<endl;
+        if(len1 > 0){
+            bufproc(rcv_buf_1,len1,tembuff_1,1);
+        }
         else{printf("/dev/ttyUSB0 cannot receive data\n");}
-
-        // len2 = roserial2.UART0_Recv(rcv_buf_2,2000);
-        // if(len2 > 0){bufproc(rcv_buf_2,len2,tembuff_2,2);}
-        // else{printf("/dev/ttyUSB1 cannot receive data\n");}
 
         ros::Time nowTime = ros::Time::now();
         IMU_datatran(imu, IMUinfo, nowTime);
@@ -119,12 +108,13 @@ int main(int argc,char *argv[]){
         cout<<"counter is "<<counter<<endl;
         counter++;
 
-        usleep(1000);
+        usleep(10000);
     }
 }
 
 
 void bufproc(const unsigned char *revbuff,int lenth,queue<unsigned char> tembuff,int datatype){
+    //cout<<"enter bufproc"<<endl;
     int startflag = 0;
     int startindex;
     int pushflag =0;
@@ -143,13 +133,15 @@ void bufproc(const unsigned char *revbuff,int lenth,queue<unsigned char> tembuff
     if(lenthoftembuff == 0){
         for(int j = 0;j <lenth;j++){
             procbuff[j] = revbuff[j];
+            cout<<"procbuff[j]="<<int(revbuff[j])<<endl;
         }
     }
     for(int i = 0;i<(lenthoftembuff + lenth);i++)
     {
-        if (procbuff[i] == 170 ){
+       // cout<<"enter loop:find start index"<<endl;
+        if (int(procbuff[i]) == 170){/*aa*/
             if(i<(lenthoftembuff + lenth-1)){
-                if(procbuff[i+1] == 85)
+                if(int(procbuff[i+1]) == 85)/*55*/
                     startflag = 1;
                     startindex = i;
             }
@@ -164,30 +156,41 @@ void bufproc(const unsigned char *revbuff,int lenth,queue<unsigned char> tembuff
             }
             pushflag =1;
         }
+       // cout<<"startflag="<<startflag<<endl;
         if (startflag == 1){
             //GTIMU_BIN
             if (datatype == 1){
+               cout<<"I am IMU1"<<endl;
                 IMUinfo.GPSweek= *(unsigned short int*) (&(procbuff[startindex+3+0]));
                 IMUinfo.GPStime= *(unsigned int*) (&(procbuff[startindex+3+2]));
                 IMUinfo.GyroX = *(double *) (&(procbuff[startindex+3+6]));
                 IMUinfo.GyroY = *(double *) (&(procbuff[startindex+3+14]));
-                IMUinfo.Gyroz = *(double *) (&(procbuff[startindex+3+22]));
+               IMUinfo.Gyroz = *(double *) (&(procbuff[startindex+3+22]));
                 IMUinfo.AccX = *(double *) (&(procbuff[startindex+3+30]));
                 IMUinfo.AccY = *(double *) (&(procbuff[startindex+3+38]));
                 IMUinfo.AccZ = *(double *) (&(procbuff[startindex+3+46]));
+                // cout<<"IMUinfo.GPSweek = "<<IMUinfo.GPSweek<<endl;
+                // cout<<"IMUinfo.GPStime = "<<IMUinfo.GPStime<<endl;
+                // cout<<" IMUinfo.GyroX = "<< IMUinfo.GyroX<<endl;
+                // cout<<" IMUinfo.GyroY = "<<IMUinfo.GyroY<<endl;
+                // cout<<"IMUinfo.GyroZ = "<< IMUinfo.Gyroz<<endl;
+                // cout<<"IMUinfo.AccX = "<< IMUinfo.AccX<<endl;
+                // cout<<"  IMUinfo.AccY  = "<<  IMUinfo.AccY <<endl;
+                // cout<<" IMUinfo.AccZ = "<<  IMUinfo.AccZ<<endl;
             }
             //GPFPD_GIN
-            if(datatype == 2){
-                IMUinfo.Yaw = *(float *)(&(procbuff[startindex+3+6]));
-                IMUinfo.Pitch = *(float *)(&(procbuff[startindex+3+10]));
-                IMUinfo.Roll = *(float *)(&(procbuff[startindex+3+14]));
-                IMUinfo.latitude = *(unsigned int *)(&(procbuff[startindex+3+18]));
-                IMUinfo.longitude = *(unsigned int *)(&(procbuff[startindex+3+22]));
-                IMUinfo.altitude = *(unsigned int *)(&(procbuff[startindex+3+26]));
-                IMUinfo.Ve = *(float *)(&(procbuff[startindex+3+30]));
-                IMUinfo.Va = *(float *)(&(procbuff[startindex+3+34]));
-                IMUinfo.Vu = *(float *)(&(procbuff[startindex+3+38]));
-            }
+            // if(datatype == 2){
+            //     cout<<"I am IMU2"<<endl;
+            //     IMUinfo.Yaw = *(float *)(&(procbuff[startindex+3+6]));
+            //     IMUinfo.Pitch = *(float *)(&(procbuff[startindex+3+10]));
+            //     IMUinfo.Roll = *(float *)(&(procbuff[startindex+3+14]));
+            //     IMUinfo.latitude = *(unsigned int *)(&(procbuff[startindex+3+18]));
+            //     IMUinfo.longitude = *(unsigned int *)(&(procbuff[startindex+3+22]));
+            //     IMUinfo.altitude = *(unsigned int *)(&(procbuff[startindex+3+26]));
+            //     IMUinfo.Ve = *(float *)(&(procbuff[startindex+3+30]));
+            //     IMUinfo.Va = *(float *)(&(procbuff[startindex+3+34]));
+            //     IMUinfo.Vu = *(float *)(&(procbuff[startindex+3+38]));
+            // }
             startflag = 0;
             startindex = 0;
         }
@@ -214,8 +217,7 @@ void IMU_datatran(sensor_msgs::Imu &temimu, GTIMU const temimudata, ros::Time co
     temimu.angular_velocity.x = temimudata.GyroX;
     temimu.angular_velocity.y = temimudata.GyroY;
     temimu.angular_velocity.z = temimudata.Gyroz;
-    /*
-    ROS_INFO("Send the IMU: [%f, %f, %f, \n %f, %f, %f, \n %f, %f, %f, %f]",
+    ROS_INFO("Send the IMU: [%f, %f, %f,%f, \n %f, %f, %f, \n %f, %f, %f]",
              temimu.orientation.x,
              temimu.orientation.y,
              temimu.orientation.z,
@@ -226,7 +228,6 @@ void IMU_datatran(sensor_msgs::Imu &temimu, GTIMU const temimudata, ros::Time co
              temimu.angular_velocity.x,
              temimu.angular_velocity.y,
              temimu.angular_velocity.z);
-    */
     return;
 
 }
