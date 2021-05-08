@@ -9,6 +9,7 @@ usage:1.identify the port you used
 #include <ros/ros.h>
 #include "linuxserial.h"
 #include <iostream>
+#include<string>
 #include <queue>
 #include <sensor_msgs/Imu.h>
 #include <tf/tf.h>
@@ -42,9 +43,7 @@ struct GTIMU{
 };
 
 
-queue<unsigned char> tembuff_1;
-
-void bufproc(const unsigned char *revbuff, int lenth, queue<unsigned char> tembuff, int datatype);
+void bufproc(const unsigned char *revbuff, int lenth);
 void IMU_datatran(sensor_msgs::Imu &temimu, GTIMU const temimudata, ros::Time Time);
 void GPS_datatran(sensor_msgs::NavSatFix &tmpGps, GTIMU const temimudata, ros::Time const Time);
 void Vel_datatran(geometry_msgs::Vector3Stamped tmpVel, GTIMU const temimudata, ros::Time const Time);
@@ -87,11 +86,12 @@ int main(int argc,char *argv[]){
     //loop body
     while (ros::ok()){
         len1 = roserial1.UART0_Recv( rcv_buf_1,2000);
-        cout<<"len1="<<len1<<endl;
+        //cout<<"len1="<<len1<<endl;
         if(len1 > 0){
-            bufproc(rcv_buf_1,len1,tembuff_1,1);
+            bufproc(rcv_buf_1,len1);
         }
         else{printf("/dev/ttyUSB0 cannot receive data\n");}
+
 
         ros::Time nowTime = ros::Time::now();
         IMU_datatran(imu, IMUinfo, nowTime);
@@ -108,79 +108,34 @@ int main(int argc,char *argv[]){
         cout<<"counter is "<<counter<<endl;
         counter++;
 
-        usleep(1000);
+        usleep(40000);
     }
 }
 
 
-void bufproc(const unsigned char *revbuff,int lenth,queue<unsigned char> tembuff,int datatype){
-    //cout<<"enter bufproc"<<endl;
+void bufproc(const unsigned char *revbuff,int lenth){
     int startflag = 0;
     int startindex =0;
-    int pushflag =0;
-    int lenthoftembuff = tembuff.size();
     unsigned char procbuff[2000] = {};
 
-    //如果tembuff中有数据，将数据转移给procbuff，再把revbuff中的数给procbuff
-    if(lenthoftembuff>0){
-        for(int i=0;i < lenthoftembuff;i++){
-            procbuff[i] = tembuff.front();
-            tembuff.pop();
-        }
-        for(int j = 0;j <lenth;j++){
-            procbuff[lenthoftembuff+1+j] = revbuff[j];
-        }
-    }
-    //如果tembuff中没有数据，直接将revbuff中的数给procbuff
-    else if(lenthoftembuff == 0){
-        for(int j = 0;j <lenth;j++){
+    for(int j = 0;j <lenth;j++){
             procbuff[j] = revbuff[j];
+            //cout<<" procbuff["<<j<<"]="<< int ( procbuff[j] );
         }
-    }
-    //遍历procbuff数组，处理数据
-    for(int i = 0;i<(lenthoftembuff + lenth);i++)
-    {
-       // cout<<"enter loop:find start index"<<endl;
 
-        if (int(procbuff[i]) == 170)/*aa*/
+    //遍历procbuff数组，处理数据
+    for(int i = 0;i<lenth;i++)
+    {
+        if (i < (lenth-2) && (int(procbuff[i]) == 170) && (int(procbuff[i+1]) == 85) &&(int(procbuff[i+2]) == 5))
         {
-            if(i<(lenthoftembuff + lenth-1))
-            {
-                if(int(procbuff[i+1]) == 85)/*55*/
-                {
-                    if (i<(lenthoftembuff + lenth-2))
-                    {
-                        if (int(procbuff[i+2]) == 5)
-                            {
-                                startflag = 1;
-                                startindex = i;
-                            }
-                    }
-                    else if (i==(lenthoftembuff + lenth-2))
-                    {
-                        tembuff.push(procbuff[i]);
-                        tembuff.push(procbuff[i+1]);
-                        pushflag =1;
-                    }
-                   
-                }
-                    
-            }
-           else  if(i == (lenthoftembuff + lenth-1) ){
-                tembuff.push(procbuff[i]);
-                pushflag =1;
-            }
+            startflag = 1;
+            startindex = i;
+           // cout<<"find start index"<<endl;             
         }
-        if ((lenth+lenthoftembuff - startindex <= 112) && (startflag == 1)&&(pushflag == 0))//数组长度不足且尚未存到tembuff
+    
+        if ((lenth - startindex > 112) && (startflag == 1))
         {
-            for(int j = startindex;j<=lenth;j++){
-                tembuff.push(procbuff[j]);
-            }
-           
-        }
-        else if ((lenth+lenthoftembuff - startindex > 112) && (startflag == 1)&&(pushflag == 0 ))
-        {
-            cout<<"I am IMU1"<<endl;
+            //cout<<"I am IMU1"<<endl;
             IMUinfo.GPSweek= *(unsigned short int*) (&(procbuff[startindex+3+0]));
             IMUinfo.GPStime= *(unsigned int*) (&(procbuff[startindex+3+2]));
             IMUinfo.GyroX = *(double *) (&(procbuff[startindex+3+6]));
@@ -190,35 +145,34 @@ void bufproc(const unsigned char *revbuff,int lenth,queue<unsigned char> tembuff
             IMUinfo.AccY = *(double *) (&(procbuff[startindex+3+38]));
             IMUinfo.AccZ = *(double *) (&(procbuff[startindex+3+46]));
             IMUinfo.Yaw = *(float *)(&(procbuff[startindex+63+6]));
-            IMUinfo.Pitch = *(float *)(&(procbuff[startindex+63+10]));
-            IMUinfo.Roll = *(float *)(&(procbuff[startindex+63+14]));
-            IMUinfo.latitude = *(unsigned int *)(&(procbuff[startindex+63+18]));
-            IMUinfo.longitude = *(unsigned int *)(&(procbuff[startindex+63+22]));
-            IMUinfo.altitude = *(unsigned int *)(&(procbuff[startindex+63+26]));
-            IMUinfo.Ve = *(float *)(&(procbuff[startindex+63+30]));
-            IMUinfo.Va = *(float *)(&(procbuff[startindex+63+34]));
-            IMUinfo.Vu = *(float *)(&(procbuff[startindex+63+38]));
-            cout<<"IMUinfo.GPSweek = "<<IMUinfo.GPSweek<<endl;
-            cout<<"IMUinfo.GPStime = "<<IMUinfo.GPStime<<endl;
-            cout<<" IMUinfo.GyroX = "<< IMUinfo.GyroX<<endl;
-            cout<<" IMUinfo.GyroY = "<<IMUinfo.GyroY<<endl;
-            cout<<"IMUinfo.GyroZ = "<< IMUinfo.Gyroz<<endl;
-            cout<<"IMUinfo.AccX = "<< IMUinfo.AccX<<endl;
-            cout<<"  IMUinfo.AccY  = "<<  IMUinfo.AccY <<endl;
-            cout<<" IMUinfo.AccZ = "<<  IMUinfo.AccZ<<endl;
-            cout<<" IMUinfo.Yaw = "<< IMUinfo.Yaw<<endl;
-            cout<<" IMUinfo.Pitch = "<<IMUinfo.Pitch<<endl;
-            cout<<"IMUinfo.Roll = "<< IMUinfo.Roll<<endl;
-            cout<<" IMUinfo.latitude= "<< IMUinfo.latitude<<endl;
-            cout<<" IMUinfo.longitude = "<<   IMUinfo.longitude<<endl;
-            cout<<"IMUinfo.altitude  = "<<IMUinfo.altitude <<endl;
-            cout<<" IMUinfo.Ve= "<<  IMUinfo.Ve<<endl;
-            cout<<" IMUinfo.Va= "<< IMUinfo.Va<<endl;
-            cout<<" IMUinfo.Vu= "<<  IMUinfo.Vu<<endl;
+            IMUinfo.Pitch = *(float *)(&(procbuff[startindex+62+10]));
+            IMUinfo.Roll = *(float *)(&(procbuff[startindex+62+14]));
+            IMUinfo.latitude = *(unsigned int *)(&(procbuff[startindex+62+18]));
+            IMUinfo.longitude = *(unsigned int *)(&(procbuff[startindex+62+22]));
+            IMUinfo.altitude = *(unsigned int *)(&(procbuff[startindex+62+26]));
+            IMUinfo.Ve = *(float *)(&(procbuff[startindex+62+30]));
+            IMUinfo.Va = *(float *)(&(procbuff[startindex+62+34]));
+            IMUinfo.Vu = *(float *)(&(procbuff[startindex+62+38]));
+            // cout<<"IMUinfo.GPSweek = "<<IMUinfo.GPSweek<<endl;
+            // cout<<"IMUinfo.GPStime = "<<IMUinfo.GPStime<<endl;
+            // cout<<" IMUinfo.GyroX = "<< IMUinfo.GyroX<<endl;
+            // cout<<" IMUinfo.GyroY = "<<IMUinfo.GyroY<<endl;
+            // cout<<"IMUinfo.GyroZ = "<< IMUinfo.Gyroz<<endl;
+            // cout<<"IMUinfo.AccX = "<< IMUinfo.AccX<<endl;
+            // cout<<"  IMUinfo.AccY  = "<<  IMUinfo.AccY <<endl;
+            // cout<<" IMUinfo.AccZ = "<<  IMUinfo.AccZ<<endl;
+            // cout<<" IMUinfo.Yaw = "<< IMUinfo.Yaw<<endl;
+            // cout<<" IMUinfo.Pitch = "<<IMUinfo.Pitch<<endl;
+            // cout<<"IMUinfo.Roll = "<< IMUinfo.Roll<<endl;
+            // cout<<" IMUinfo.latitude= "<< IMUinfo.latitude<<endl;
+            // cout<<" IMUinfo.longitude = "<<   IMUinfo.longitude<<endl;
+            // cout<<"IMUinfo.altitude  = "<<IMUinfo.altitude <<endl;
+            // cout<<" IMUinfo.Ve= "<<  IMUinfo.Ve<<endl;
+            // cout<<" IMUinfo.Va= "<< IMUinfo.Va<<endl;
+            // cout<<" IMUinfo.Vu= "<<  IMUinfo.Vu<<endl;
             startflag = 0;
             startindex = 0;
         }
-        
     }
     procbuff[2000]={'+'};
     // startflag = 0;
@@ -228,10 +182,10 @@ void bufproc(const unsigned char *revbuff,int lenth,queue<unsigned char> tembuff
 }
 
 void IMU_datatran(sensor_msgs::Imu &temimu, GTIMU const temimudata, ros::Time const Time){
-    cout<<"enter imu_datatran"<<endl;
+    //cout<<"enter imu_datatran"<<endl;
     tf::Quaternion q = tf::createQuaternionFromRPY((temimudata.Roll*3.1415926/180),(temimudata.Pitch*3.1415926/180), (temimudata.Yaw*3.1415926/180));
     
-    cout<<"q.x()="<<q.x()<<endl;
+    //cout<<"q.x()="<<q.x()<<endl;
     temimu.header.stamp = Time;
     temimu.header.frame_id = "base_IMU";
     temimu.orientation.x = q.x();
@@ -260,7 +214,7 @@ void IMU_datatran(sensor_msgs::Imu &temimu, GTIMU const temimudata, ros::Time co
 }
 
 void GPS_datatran(sensor_msgs::NavSatFix &tmpGps, GTIMU const temimudata, ros::Time const Time){
-    cout<<"enter GPS_datatran"<<endl;
+    //cout<<"enter GPS_datatran"<<endl;
     if (temimudata.longitude == 0 ||
             temimudata.latitude == 0 ||
             temimudata.altitude == 0 ||
@@ -283,12 +237,13 @@ void GPS_datatran(sensor_msgs::NavSatFix &tmpGps, GTIMU const temimudata, ros::T
 }
 
 void Vel_datatran(geometry_msgs::Vector3Stamped tmpVel, GTIMU const temimudata, ros::Time const Time){
-    cout<<"enter Vel_datatran"<<endl;
+    //cout<<"enter Vel_datatran"<<endl;
     tmpVel.header.stamp = Time;
 
-    if (abs(temimudata.Ve) <= 0.000000001
-        && abs(temimudata.Ve) <= 0.000000001
-        && abs(temimudata.Ve) <= 0.000000001)
+    if (abs(temimudata.Ve)>=1000000000
+        && abs(temimudata.Va)>=1000000000
+        && abs(temimudata.Vu)>=1000000000)
+
     {
         return;
     }

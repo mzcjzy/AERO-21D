@@ -13,6 +13,8 @@ linuxserial.h
 /home/wujq/catkin_diff_gps/src/diff_gps/src/linuxserial.h
 iostream
 -
+string
+-
 queue
 -
 sensor_msgs/Imu.h
