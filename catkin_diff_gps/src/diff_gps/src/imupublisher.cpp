@@ -116,6 +116,7 @@ int main(int argc,char *argv[]){
 void bufproc(const unsigned char *revbuff,int lenth){
     int startflag = 0;
     int startindex =0;
+    int datatype;
     unsigned char procbuff[2000] = {};
 
     for(int j = 0;j <lenth;j++){
@@ -130,10 +131,19 @@ void bufproc(const unsigned char *revbuff,int lenth){
         {
             startflag = 1;
             startindex = i;
+            datatype = 1;
+           // cout<<"find start index"<<endl;             
+        }
+
+        if (i < (lenth-2) && (int(procbuff[i]) == 170) && (int(procbuff[i+1]) == 85) &&(int(procbuff[i+2]) == 1))
+        {
+            startflag = 1;
+            startindex = i;
+            datatype = 2;
            // cout<<"find start index"<<endl;             
         }
     
-        if ((lenth - startindex > 112) && (startflag == 1))
+        if ((lenth - startindex > 59) && (startflag == 1)&& (datatype == 1))
         {
             //cout<<"I am IMU1"<<endl;
             IMUinfo.GPSweek= *(unsigned short int*) (&(procbuff[startindex+3+0]));
@@ -144,32 +154,40 @@ void bufproc(const unsigned char *revbuff,int lenth){
             IMUinfo.AccX = *(double *) (&(procbuff[startindex+3+30]));
             IMUinfo.AccY = *(double *) (&(procbuff[startindex+3+38]));
             IMUinfo.AccZ = *(double *) (&(procbuff[startindex+3+46]));
-            IMUinfo.Yaw = *(float *)(&(procbuff[startindex+63+6]));
-            IMUinfo.Pitch = *(float *)(&(procbuff[startindex+62+10]));
-            IMUinfo.Roll = *(float *)(&(procbuff[startindex+62+14]));
-            IMUinfo.latitude = *(unsigned int *)(&(procbuff[startindex+62+18]));
-            IMUinfo.longitude = *(unsigned int *)(&(procbuff[startindex+62+22]));
-            IMUinfo.altitude = *(unsigned int *)(&(procbuff[startindex+62+26]));
-            IMUinfo.Ve = *(float *)(&(procbuff[startindex+62+30]));
-            IMUinfo.Va = *(float *)(&(procbuff[startindex+62+34]));
-            IMUinfo.Vu = *(float *)(&(procbuff[startindex+62+38]));
-            // cout<<"IMUinfo.GPSweek = "<<IMUinfo.GPSweek<<endl;
-            // cout<<"IMUinfo.GPStime = "<<IMUinfo.GPStime<<endl;
-            // cout<<" IMUinfo.GyroX = "<< IMUinfo.GyroX<<endl;
-            // cout<<" IMUinfo.GyroY = "<<IMUinfo.GyroY<<endl;
-            // cout<<"IMUinfo.GyroZ = "<< IMUinfo.Gyroz<<endl;
-            // cout<<"IMUinfo.AccX = "<< IMUinfo.AccX<<endl;
-            // cout<<"  IMUinfo.AccY  = "<<  IMUinfo.AccY <<endl;
-            // cout<<" IMUinfo.AccZ = "<<  IMUinfo.AccZ<<endl;
-            // cout<<" IMUinfo.Yaw = "<< IMUinfo.Yaw<<endl;
-            // cout<<" IMUinfo.Pitch = "<<IMUinfo.Pitch<<endl;
-            // cout<<"IMUinfo.Roll = "<< IMUinfo.Roll<<endl;
-            // cout<<" IMUinfo.latitude= "<< IMUinfo.latitude<<endl;
-            // cout<<" IMUinfo.longitude = "<<   IMUinfo.longitude<<endl;
-            // cout<<"IMUinfo.altitude  = "<<IMUinfo.altitude <<endl;
-            // cout<<" IMUinfo.Ve= "<<  IMUinfo.Ve<<endl;
-            // cout<<" IMUinfo.Va= "<< IMUinfo.Va<<endl;
-            // cout<<" IMUinfo.Vu= "<<  IMUinfo.Vu<<endl;
+            
+            cout<<"IMUinfo.GPSweek = "<<IMUinfo.GPSweek<<endl;
+            cout<<"IMUinfo.GPStime = "<<IMUinfo.GPStime<<endl;
+            cout<<" IMUinfo.GyroX = "<< IMUinfo.GyroX<<endl;
+            cout<<" IMUinfo.GyroY = "<<IMUinfo.GyroY<<endl;
+            cout<<"IMUinfo.GyroZ = "<< IMUinfo.Gyroz<<endl;
+            cout<<"IMUinfo.AccX = "<< IMUinfo.AccX<<endl;
+            cout<<"  IMUinfo.AccY  = "<<  IMUinfo.AccY <<endl;
+            cout<<" IMUinfo.AccZ = "<<  IMUinfo.AccZ<<endl;
+            startflag = 0;
+            startindex = 0;
+        }
+
+        if ((lenth - startindex > 52) && (startflag == 1)&& (datatype == 2))
+        {
+           IMUinfo.Yaw = *(float *)(&(procbuff[startindex+3+6]));
+            IMUinfo.Pitch = *(float *)(&(procbuff[startindex+3+10]));
+            IMUinfo.Roll = *(float *)(&(procbuff[startindex+3+14]));
+            IMUinfo.latitude = *(unsigned int *)(&(procbuff[startindex+3+18]));
+            IMUinfo.longitude = *(unsigned int *)(&(procbuff[startindex+3+22]));
+            IMUinfo.altitude = *(unsigned int *)(&(procbuff[startindex+3+26]));
+            IMUinfo.Ve = *(float *)(&(procbuff[startindex+3+30]));
+            IMUinfo.Va = *(float *)(&(procbuff[startindex+3+34]));
+            IMUinfo.Vu = *(float *)(&(procbuff[startindex+3+38]));
+
+            cout<<" IMUinfo.Yaw = "<< IMUinfo.Yaw<<endl;
+            cout<<" IMUinfo.Pitch = "<<IMUinfo.Pitch<<endl;
+            cout<<"IMUinfo.Roll = "<< IMUinfo.Roll<<endl;
+            cout<<" IMUinfo.latitude= "<< IMUinfo.latitude<<endl;
+            cout<<" IMUinfo.longitude = "<<   IMUinfo.longitude<<endl;
+            cout<<"IMUinfo.altitude  = "<<IMUinfo.altitude <<endl;
+            cout<<" IMUinfo.Ve= "<<  IMUinfo.Ve<<endl;
+            cout<<" IMUinfo.Va= "<< IMUinfo.Va<<endl;
+            cout<<" IMUinfo.Vu= "<<  IMUinfo.Vu<<endl;
             startflag = 0;
             startindex = 0;
         }
