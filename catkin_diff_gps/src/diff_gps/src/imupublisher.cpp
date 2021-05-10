@@ -86,7 +86,7 @@ int main(int argc,char *argv[]){
     //loop body
     while (ros::ok()){
         len1 = roserial1.UART0_Recv( rcv_buf_1,2000);
-        //cout<<"len1="<<len1<<endl;
+        cout<<"len1="<<len1<<endl;
         if(len1 > 0){
             bufproc(rcv_buf_1,len1);
         }
@@ -108,7 +108,7 @@ int main(int argc,char *argv[]){
         cout<<"counter is "<<counter<<endl;
         counter++;
 
-        usleep(40000);
+        usleep(1000);
     }
 }
 
