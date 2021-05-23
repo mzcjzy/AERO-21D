@@ -40,15 +40,14 @@ class tf_global {
         ros::Subscriber imu_sub;
         ros::Subscriber gps_sub;
         //话题发送
-	    ros::Publisher tf_ready = n_.advertise<std_msgs::Bool>("tf_ready", 1000);
+	    ros::Publisher tf_ready;
         int readyOk = 0;//存储tf_ready话题是否发布   
         tf::TransformBroadcaster tf_pub_;//创建tf广播器
 
         //起始位置经纬度
-        //TODO:写一个初始点经纬度读取函数
         double long_origin = 0;
         double la_origin = 0;
-        //目标点经纬度
+        //车辆当前经纬度
         double long_target = 0;
         double la_target = 0;
         //旋转矩阵
@@ -180,7 +179,10 @@ void tf_global::publish_tfTree(const double &x_relative, const double &y_relativ
 接收imu四元数数据，接收成功后，imuready置为true
 */
 void tf_global::callback_imu(const ImuConstPtr &imu) {
-    this->rotation = imu->orientation;
+    this->rotation.x = imu->orientation.x;
+    this->rotation.y = imu->orientation.y;
+    this->rotation.z = imu->orientation.z;
+    this->rotation.w = imu->orientation.w;
     imuready = true;
     return;
 }
@@ -266,7 +268,7 @@ bool tf_global::init_origin(){
             la_temp = la_target;
             counter = 0;
         }
-        if(long_temp - long_target < 0.00000000000001 && la_temp - la_target < 0.00000000000001){
+        if(fabs(long_temp - long_target) < 0.00000000000001 && fabs(la_temp - la_target) < 0.00000000000001){
             counter ++;
         }
         looprate.sleep();
