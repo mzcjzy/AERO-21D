@@ -467,6 +467,19 @@ std_msgs_generate_messages_py/fast:
 .PHONY : std_msgs_generate_messages_py/fast
 
 #=============================================================================
+# Target rules for targets named imupublisherNew
+
+# Build rule for target.
+imupublisherNew: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 imupublisherNew
+.PHONY : imupublisherNew
+
+# fast build rule for target.
+imupublisherNew/fast:
+	$(MAKE) -f diff_gps/CMakeFiles/imupublisherNew.dir/build.make diff_gps/CMakeFiles/imupublisherNew.dir/build
+.PHONY : imupublisherNew/fast
+
+#=============================================================================
 # Target rules for targets named geometry_msgs_generate_messages_eus
 
 # Build rule for target.
@@ -983,6 +996,7 @@ help:
 	@echo "... actionlib_msgs_generate_messages_eus"
 	@echo "... roscpp_generate_messages_py"
 	@echo "... std_msgs_generate_messages_py"
+	@echo "... imupublisherNew"
 	@echo "... geometry_msgs_generate_messages_eus"
 	@echo "... roscpp_generate_messages_nodejs"
 	@echo "... roscpp_generate_messages_eus"

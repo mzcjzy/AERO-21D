@@ -378,6 +378,21 @@ std_msgs_generate_messages_py/fast:
 .PHONY : std_msgs_generate_messages_py/fast
 
 # Convenience name for target.
+diff_gps/CMakeFiles/imupublisherNew.dir/rule:
+	cd /home/wujq/catkin_diff_gps/build && $(MAKE) -f CMakeFiles/Makefile2 diff_gps/CMakeFiles/imupublisherNew.dir/rule
+.PHONY : diff_gps/CMakeFiles/imupublisherNew.dir/rule
+
+# Convenience name for target.
+imupublisherNew: diff_gps/CMakeFiles/imupublisherNew.dir/rule
+
+.PHONY : imupublisherNew
+
+# fast build rule for target.
+imupublisherNew/fast:
+	cd /home/wujq/catkin_diff_gps/build && $(MAKE) -f diff_gps/CMakeFiles/imupublisherNew.dir/build.make diff_gps/CMakeFiles/imupublisherNew.dir/build
+.PHONY : imupublisherNew/fast
+
+# Convenience name for target.
 diff_gps/CMakeFiles/geometry_msgs_generate_messages_eus.dir/rule:
 	cd /home/wujq/catkin_diff_gps/build && $(MAKE) -f CMakeFiles/Makefile2 diff_gps/CMakeFiles/geometry_msgs_generate_messages_eus.dir/rule
 .PHONY : diff_gps/CMakeFiles/geometry_msgs_generate_messages_eus.dir/rule
@@ -959,6 +974,33 @@ src/imupublisher.cpp.s:
 	cd /home/wujq/catkin_diff_gps/build && $(MAKE) -f diff_gps/CMakeFiles/imupublisher.dir/build.make diff_gps/CMakeFiles/imupublisher.dir/src/imupublisher.cpp.s
 .PHONY : src/imupublisher.cpp.s
 
+src/imupublisherNew.o: src/imupublisherNew.cpp.o
+
+.PHONY : src/imupublisherNew.o
+
+# target to build an object file
+src/imupublisherNew.cpp.o:
+	cd /home/wujq/catkin_diff_gps/build && $(MAKE) -f diff_gps/CMakeFiles/imupublisherNew.dir/build.make diff_gps/CMakeFiles/imupublisherNew.dir/src/imupublisherNew.cpp.o
+.PHONY : src/imupublisherNew.cpp.o
+
+src/imupublisherNew.i: src/imupublisherNew.cpp.i
+
+.PHONY : src/imupublisherNew.i
+
+# target to preprocess a source file
+src/imupublisherNew.cpp.i:
+	cd /home/wujq/catkin_diff_gps/build && $(MAKE) -f diff_gps/CMakeFiles/imupublisherNew.dir/build.make diff_gps/CMakeFiles/imupublisherNew.dir/src/imupublisherNew.cpp.i
+.PHONY : src/imupublisherNew.cpp.i
+
+src/imupublisherNew.s: src/imupublisherNew.cpp.s
+
+.PHONY : src/imupublisherNew.s
+
+# target to generate assembly for a file
+src/imupublisherNew.cpp.s:
+	cd /home/wujq/catkin_diff_gps/build && $(MAKE) -f diff_gps/CMakeFiles/imupublisherNew.dir/build.make diff_gps/CMakeFiles/imupublisherNew.dir/src/imupublisherNew.cpp.s
+.PHONY : src/imupublisherNew.cpp.s
+
 src/linuxserial.o: src/linuxserial.cpp.o
 
 .PHONY : src/linuxserial.o
@@ -1118,6 +1160,7 @@ help:
 	@echo "... actionlib_msgs_generate_messages_eus"
 	@echo "... roscpp_generate_messages_py"
 	@echo "... std_msgs_generate_messages_py"
+	@echo "... imupublisherNew"
 	@echo "... geometry_msgs_generate_messages_eus"
 	@echo "... roscpp_generate_messages_nodejs"
 	@echo "... roscpp_generate_messages_eus"
@@ -1161,6 +1204,9 @@ help:
 	@echo "... src/imupublisher.o"
 	@echo "... src/imupublisher.i"
 	@echo "... src/imupublisher.s"
+	@echo "... src/imupublisherNew.o"
+	@echo "... src/imupublisherNew.i"
+	@echo "... src/imupublisherNew.s"
 	@echo "... src/linuxserial.o"
 	@echo "... src/linuxserial.i"
 	@echo "... src/linuxserial.s"

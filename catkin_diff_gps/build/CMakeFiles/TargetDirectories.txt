@@ -53,6 +53,7 @@
 /home/wujq/catkin_diff_gps/build/diff_gps/CMakeFiles/actionlib_msgs_generate_messages_eus.dir
 /home/wujq/catkin_diff_gps/build/diff_gps/CMakeFiles/roscpp_generate_messages_py.dir
 /home/wujq/catkin_diff_gps/build/diff_gps/CMakeFiles/std_msgs_generate_messages_py.dir
+/home/wujq/catkin_diff_gps/build/diff_gps/CMakeFiles/imupublisherNew.dir
 /home/wujq/catkin_diff_gps/build/diff_gps/CMakeFiles/geometry_msgs_generate_messages_eus.dir
 /home/wujq/catkin_diff_gps/build/diff_gps/CMakeFiles/roscpp_generate_messages_nodejs.dir
 /home/wujq/catkin_diff_gps/build/diff_gps/CMakeFiles/roscpp_generate_messages_eus.dir

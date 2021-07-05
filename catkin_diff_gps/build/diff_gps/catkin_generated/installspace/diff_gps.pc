@@ -1,4 +1,4 @@
-prefix=/home/wujq/catkin_diff_gps/install
+prefix=/home/wujq/AERO-21D/catkin_diff_gps/install
 
 Name: diff_gps
 Description: Description of diff_gps
