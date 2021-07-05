@@ -68,8 +68,8 @@ int roserialhandler::UART0_Open() {
 int roserialhandler::UART0_Set( int speed, int flow_ctrl, int databits, int stopbits, int parity) {
     int   i;
     int   status;
-    int   speed_arr[] = { B115200, B19200, B9600, B4800, B2400, B1200, B300};
-    int   name_arr[] = {115200,  19200,  9600,  4800,  2400,  1200,  300};
+    int   speed_arr[] = { B230400, B115200, B19200, B9600, B4800, B2400, B1200, B300};
+    int   name_arr[] = {230400, 115200,  19200,  9600,  4800,  2400,  1200,  300};
     
     //结构体，存储与fd指向的对象相关的参数
     struct termios options;

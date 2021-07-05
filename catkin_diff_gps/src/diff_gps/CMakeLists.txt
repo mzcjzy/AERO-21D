@@ -169,6 +169,8 @@ add_dependencies(linuxserial ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORT
 add_executable(imupublisher src/imupublisher.cpp)
 target_link_libraries(imupublisher  linuxserial  ${catkin_LIBRARIES} )
 
+add_executable(imupublisherNew src/imupublisherNew.cpp)
+target_link_libraries(imupublisherNew  linuxserial  ${catkin_LIBRARIES} )
 
 add_executable(test_imupub src/test_imupub.cpp)
 target_link_libraries(test_imupub  linuxserial  ${catkin_LIBRARIES} )
