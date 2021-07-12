@@ -251,6 +251,7 @@ set(CMAKE_DEPEND_INFO_FILES
   "diff_gps/CMakeFiles/actionlib_msgs_generate_messages_eus.dir/DependInfo.cmake"
   "diff_gps/CMakeFiles/roscpp_generate_messages_py.dir/DependInfo.cmake"
   "diff_gps/CMakeFiles/std_msgs_generate_messages_py.dir/DependInfo.cmake"
+  "diff_gps/CMakeFiles/imupublisherNew.dir/DependInfo.cmake"
   "diff_gps/CMakeFiles/geometry_msgs_generate_messages_eus.dir/DependInfo.cmake"
   "diff_gps/CMakeFiles/roscpp_generate_messages_nodejs.dir/DependInfo.cmake"
   "diff_gps/CMakeFiles/roscpp_generate_messages_eus.dir/DependInfo.cmake"

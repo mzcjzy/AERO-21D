@@ -411,6 +411,7 @@ clean: gtest/googlemock/gtest/CMakeFiles/gtest.dir/clean
 diff_gps/all: diff_gps/CMakeFiles/test_imupub.dir/all
 diff_gps/all: diff_gps/CMakeFiles/imupublisher.dir/all
 diff_gps/all: diff_gps/CMakeFiles/linuxserial.dir/all
+diff_gps/all: diff_gps/CMakeFiles/imupublisherNew.dir/all
 diff_gps/all: diff_gps/CMakeFiles/tfbroadcaster.dir/all
 diff_gps/all: diff_gps/CMakeFiles/test_velocitypub.dir/all
 diff_gps/all: diff_gps/CMakeFiles/test_gpspub.dir/all
@@ -432,6 +433,7 @@ diff_gps/clean: diff_gps/CMakeFiles/actionlib_msgs_generate_messages_lisp.dir/cl
 diff_gps/clean: diff_gps/CMakeFiles/actionlib_msgs_generate_messages_eus.dir/clean
 diff_gps/clean: diff_gps/CMakeFiles/roscpp_generate_messages_py.dir/clean
 diff_gps/clean: diff_gps/CMakeFiles/std_msgs_generate_messages_py.dir/clean
+diff_gps/clean: diff_gps/CMakeFiles/imupublisherNew.dir/clean
 diff_gps/clean: diff_gps/CMakeFiles/geometry_msgs_generate_messages_eus.dir/clean
 diff_gps/clean: diff_gps/CMakeFiles/roscpp_generate_messages_nodejs.dir/clean
 diff_gps/clean: diff_gps/CMakeFiles/roscpp_generate_messages_eus.dir/clean
@@ -484,7 +486,7 @@ diff_gps/preinstall:
 diff_gps/CMakeFiles/test_imupub.dir/all: diff_gps/CMakeFiles/linuxserial.dir/all
 	$(MAKE) -f diff_gps/CMakeFiles/test_imupub.dir/build.make diff_gps/CMakeFiles/test_imupub.dir/depend
 	$(MAKE) -f diff_gps/CMakeFiles/test_imupub.dir/build.make diff_gps/CMakeFiles/test_imupub.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/wujq/catkin_diff_gps/build/CMakeFiles --progress-num=18,19 "Built target test_imupub"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/wujq/catkin_diff_gps/build/CMakeFiles --progress-num=20,21 "Built target test_imupub"
 .PHONY : diff_gps/CMakeFiles/test_imupub.dir/all
 
 # Include target in all.
@@ -602,7 +604,7 @@ diff_gps/CMakeFiles/linuxserial.dir/all: diff_gps/CMakeFiles/actionlib_generate_
 diff_gps/CMakeFiles/linuxserial.dir/all: diff_gps/CMakeFiles/actionlib_generate_messages_py.dir/all
 	$(MAKE) -f diff_gps/CMakeFiles/linuxserial.dir/build.make diff_gps/CMakeFiles/linuxserial.dir/depend
 	$(MAKE) -f diff_gps/CMakeFiles/linuxserial.dir/build.make diff_gps/CMakeFiles/linuxserial.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/wujq/catkin_diff_gps/build/CMakeFiles --progress-num=14,15 "Built target linuxserial"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/wujq/catkin_diff_gps/build/CMakeFiles --progress-num=16,17 "Built target linuxserial"
 .PHONY : diff_gps/CMakeFiles/linuxserial.dir/all
 
 # Include target in all.
@@ -985,6 +987,43 @@ clean: diff_gps/CMakeFiles/std_msgs_generate_messages_py.dir/clean
 .PHONY : clean
 
 #=============================================================================
+# Target rules for target diff_gps/CMakeFiles/imupublisherNew.dir
+
+# All Build rule for target.
+diff_gps/CMakeFiles/imupublisherNew.dir/all: diff_gps/CMakeFiles/linuxserial.dir/all
+	$(MAKE) -f diff_gps/CMakeFiles/imupublisherNew.dir/build.make diff_gps/CMakeFiles/imupublisherNew.dir/depend
+	$(MAKE) -f diff_gps/CMakeFiles/imupublisherNew.dir/build.make diff_gps/CMakeFiles/imupublisherNew.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/wujq/catkin_diff_gps/build/CMakeFiles --progress-num=14,15 "Built target imupublisherNew"
+.PHONY : diff_gps/CMakeFiles/imupublisherNew.dir/all
+
+# Include target in all.
+all: diff_gps/CMakeFiles/imupublisherNew.dir/all
+
+.PHONY : all
+
+# Build rule for subdir invocation for target.
+diff_gps/CMakeFiles/imupublisherNew.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/wujq/catkin_diff_gps/build/CMakeFiles 4
+	$(MAKE) -f CMakeFiles/Makefile2 diff_gps/CMakeFiles/imupublisherNew.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/wujq/catkin_diff_gps/build/CMakeFiles 0
+.PHONY : diff_gps/CMakeFiles/imupublisherNew.dir/rule
+
+# Convenience name for target.
+imupublisherNew: diff_gps/CMakeFiles/imupublisherNew.dir/rule
+
+.PHONY : imupublisherNew
+
+# clean rule for target.
+diff_gps/CMakeFiles/imupublisherNew.dir/clean:
+	$(MAKE) -f diff_gps/CMakeFiles/imupublisherNew.dir/build.make diff_gps/CMakeFiles/imupublisherNew.dir/clean
+.PHONY : diff_gps/CMakeFiles/imupublisherNew.dir/clean
+
+# clean rule for target.
+clean: diff_gps/CMakeFiles/imupublisherNew.dir/clean
+
+.PHONY : clean
+
+#=============================================================================
 # Target rules for target diff_gps/CMakeFiles/geometry_msgs_generate_messages_eus.dir
 
 # All Build rule for target.
@@ -1279,7 +1318,7 @@ clean: diff_gps/CMakeFiles/sensor_msgs_generate_messages_eus.dir/clean
 diff_gps/CMakeFiles/tfbroadcaster.dir/all:
 	$(MAKE) -f diff_gps/CMakeFiles/tfbroadcaster.dir/build.make diff_gps/CMakeFiles/tfbroadcaster.dir/depend
 	$(MAKE) -f diff_gps/CMakeFiles/tfbroadcaster.dir/build.make diff_gps/CMakeFiles/tfbroadcaster.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/wujq/catkin_diff_gps/build/CMakeFiles --progress-num=22,23 "Built target tfbroadcaster"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/wujq/catkin_diff_gps/build/CMakeFiles --progress-num=24,25 "Built target tfbroadcaster"
 .PHONY : diff_gps/CMakeFiles/tfbroadcaster.dir/all
 
 # Include target in all.
@@ -1348,7 +1387,7 @@ clean: diff_gps/CMakeFiles/std_msgs_generate_messages_eus.dir/clean
 diff_gps/CMakeFiles/test_velocitypub.dir/all: diff_gps/CMakeFiles/linuxserial.dir/all
 	$(MAKE) -f diff_gps/CMakeFiles/test_velocitypub.dir/build.make diff_gps/CMakeFiles/test_velocitypub.dir/depend
 	$(MAKE) -f diff_gps/CMakeFiles/test_velocitypub.dir/build.make diff_gps/CMakeFiles/test_velocitypub.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/wujq/catkin_diff_gps/build/CMakeFiles --progress-num=20,21 "Built target test_velocitypub"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/wujq/catkin_diff_gps/build/CMakeFiles --progress-num=22,23 "Built target test_velocitypub"
 .PHONY : diff_gps/CMakeFiles/test_velocitypub.dir/all
 
 # Include target in all.
@@ -2089,7 +2128,7 @@ clean: diff_gps/CMakeFiles/actionlib_generate_messages_lisp.dir/clean
 diff_gps/CMakeFiles/test_gpspub.dir/all: diff_gps/CMakeFiles/linuxserial.dir/all
 	$(MAKE) -f diff_gps/CMakeFiles/test_gpspub.dir/build.make diff_gps/CMakeFiles/test_gpspub.dir/depend
 	$(MAKE) -f diff_gps/CMakeFiles/test_gpspub.dir/build.make diff_gps/CMakeFiles/test_gpspub.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/wujq/catkin_diff_gps/build/CMakeFiles --progress-num=16,17 "Built target test_gpspub"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/wujq/catkin_diff_gps/build/CMakeFiles --progress-num=18,19 "Built target test_gpspub"
 .PHONY : diff_gps/CMakeFiles/test_gpspub.dir/all
 
 # Include target in all.

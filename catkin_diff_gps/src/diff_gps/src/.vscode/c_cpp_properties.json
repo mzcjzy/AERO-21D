@@ -9,13 +9,9 @@
         "/opt/ros/melodic/include/**",
         "/home/wujq/catkin_diff_gps/src/diff_gps/include/**",
         "/home/wujq/demo02_ws/src/hello_vscode/include/**",
-        "/home/wujq/AERO-21D/catkin_diff_gps/src/diff_gps/include/**",
         "/usr/include/**"
       ],
-      "name": "ROS",
-      "intelliSenseMode": "gcc-x64",
-      "compilerPath":"/usr/bin/gcc",
-      "cppStandard":"c++17"
+      "name": "ROS"
     }
   ],
   "version": 4
