@@ -254,3 +254,17 @@ int roserialhandler::UART0_Send(char *send_buf, int data_len) {
 void roserialhandler::UART0_Close(int fd) {
     close(fd);
 }
+
+int roserialhandler::wubJTT808CalculateChecksum(unsigned char *aubData_p, int auwDataLength)
+{
+    int aubChecksum = 0;
+    int auwCnt = 0;
+ 
+    while(auwCnt < auwDataLength)
+    {
+        aubChecksum ^= *(int*)(&aubData_p[auwCnt]);
+        auwCnt++;
+    }
+ 
+    return aubChecksum;
+}
