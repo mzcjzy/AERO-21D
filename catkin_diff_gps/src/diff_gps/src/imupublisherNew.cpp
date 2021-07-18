@@ -6,6 +6,7 @@ usage:1.identify the port you used
       3.change the Baudrate
       4.the looprate is set in line 71   */    
 
+
 #include <ros/ros.h>
 #include "linuxserial.h"
 #include <iostream>
@@ -53,9 +54,11 @@ GTIMU IMUinfo;
 sensor_msgs::Imu imu;
 sensor_msgs::NavSatFix gps;
 geometry_msgs::Vector3Stamped velocity;
+roserialhandler roserial1("/dev/ttyUSB0",230400);
 
 int main(int argc,char *argv[]){
-    
+    setlocale(LC_ALL,"");//可输出中文
+
     //variables for port1
     int fd1;                            //文件描述符
     int err1;                           //返回调用函数的状态
@@ -72,7 +75,7 @@ int main(int argc,char *argv[]){
     ros::Publisher Velocity_pub = handle.advertise<geometry_msgs::Vector3Stamped>("Velocity_data", 1000);
 
 
-    roserialhandler roserial1("/dev/ttyUSB0",230400);
+
     fd1 = roserial1.UART0_Open();
 
     do{
@@ -134,9 +137,18 @@ void bufproc(const unsigned char *revbuff,int lenth){
            // cout<<"find start index"<<endl;             
         }
 
-        if ((lenth - startindex > 51) && (startflag == 1))
+        if ((lenth - startindex > 61) && (startflag == 1))
         {
-            IMUinfo.GPSweek= *(unsigned int*) (&(procbuff[startindex+58]));
+            /*异或校验*/
+            int auChecksum1 ;
+            auChecksum1 = roserial1.wubJTT808CalculateChecksum( procbuff +startindex,56);
+
+           int auChecksum2 ;
+            auChecksum2 = roserial1.wubJTT808CalculateChecksum( procbuff +startindex,61);
+
+            if (auChecksum1 == *(int*)(&(procbuff[startindex+57])) && auChecksum2 == *(int*)(&procbuff[startindex+62]))
+            {
+                IMUinfo.GPSweek= *(unsigned int*) (&(procbuff[startindex+58]));
             IMUinfo.GPStime= *(unsigned int*) (&(procbuff[startindex+52]));
             short int Yaw = *(short int*)(&(procbuff[startindex+7]));
             IMUinfo.Yaw = (float)Yaw*(float)360/32768;
@@ -189,6 +201,12 @@ void bufproc(const unsigned char *revbuff,int lenth){
             cout<<"IMUinfo.AccX = "<< IMUinfo.AccX<<endl;
             cout<<"  IMUinfo.AccY  = "<<  IMUinfo.AccY <<endl;
             cout<<" IMUinfo.AccZ = "<<  IMUinfo.AccZ<<endl;
+            }
+
+            else{
+                cout<<"数据丢失"<<endl;
+            }
+            
             startflag = 0;
             startindex = 0;
         }
