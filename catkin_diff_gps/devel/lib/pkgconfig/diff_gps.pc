@@ -1,0 +1,8 @@
+prefix=/home/wujq/AERO-21D/catkin_diff_gps/devel
+
+Name: diff_gps
+Description: Description of diff_gps
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

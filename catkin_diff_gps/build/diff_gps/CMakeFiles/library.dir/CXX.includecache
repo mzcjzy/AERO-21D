@@ -1,0 +1,20 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/wujq/catkin_diff_gps/src/diff_gps/src/library.cpp
+iostream
+-
+stdio.h
+-
+library.h
+/home/wujq/catkin_diff_gps/src/diff_gps/src/library.h
+cmath
+-
+
+/home/wujq/catkin_diff_gps/src/diff_gps/src/library.h
+
