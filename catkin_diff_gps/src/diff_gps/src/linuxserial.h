@@ -56,7 +56,7 @@ public:
 
     int UART0_Send(char *send_buf,int data_len);
 
-    int wubJTT808CalculateChecksum(unsigned char *aubData_p,int auwDataLength);
+    unsigned char wubJTT808CalculateChecksum(unsigned char *aubData_p,int auwDataLength);
 
 
 };
