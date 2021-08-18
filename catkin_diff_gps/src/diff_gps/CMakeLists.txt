@@ -161,19 +161,22 @@ add_library(linuxserial
    src/linuxserial.cpp
 )
 
-add_library(crcLib
-   include/diff_gps/crcLib.h
-   src/crcLib.cpp
-)
+# add_library(crcLib
+#    include/diff_gps/crcLib.h
+#    src/crcLib.cpp
+# )
 target_link_libraries(linuxserial ${catkin_LIBRARIES})
 add_dependencies(linuxserial ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
+# target_link_libraries(crcLib ${catkin_LIBRARIES})
+# add_dependencies(crcLib ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
-add_executable(imupublisher src/imupublisher.cpp)
-target_link_libraries(imupublisher  linuxserial  crcLib ${catkin_LIBRARIES} )
+# add_executable(imupublisher src/imupublisher.cpp)
+# target_link_libraries(imupublisher  linuxserial  crcLib ${catkin_LIBRARIES} )
 
 add_executable(imupublisherNew src/imupublisherNew.cpp)
-target_link_libraries(imupublisherNew  linuxserial  crcLib ${catkin_LIBRARIES} )
+target_link_libraries(imupublisherNew  linuxserial  ${catkin_LIBRARIES} )
+
 
 add_executable(test_imupub src/test_imupub.cpp)
 target_link_libraries(test_imupub  linuxserial  ${catkin_LIBRARIES} )
