@@ -1,2 +1,0 @@
-diff_gps
--DCATKIN_DEVEL_PREFIX=/home/wujq/AERO-21D/catkin_diff_gps/devel -DCMAKE_INSTALL_PREFIX=/home/wujq/AERO-21D/catkin_diff_gps/install -G Unix Makefiles
