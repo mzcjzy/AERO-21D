@@ -255,14 +255,14 @@ void roserialhandler::UART0_Close(int fd) {
     close(fd);
 }
 
-unsigned char roserialhandler::wubJTT808CalculateChecksum(unsigned char *aubData_p, int auwDataLength)
+int roserialhandler::wubJTT808CalculateChecksum(unsigned char *aubData_p, int auwDataLength)
 {
-    unsigned char aubChecksum = aubData_p[0];
-    int auwCnt = 1;
+    int aubChecksum = 0;
+    int auwCnt = 0;
  
     while(auwCnt < auwDataLength)
     {
-        aubChecksum ^= aubData_p[auwCnt];
+        aubChecksum ^= *(int*)(&aubData_p[auwCnt]);
         auwCnt++;
     }
  
