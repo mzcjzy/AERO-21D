@@ -1,9 +1,0 @@
-/home/wujq/catkin_diff_gps/install/_setup_util.py
-/home/wujq/catkin_diff_gps/install/env.sh
-/home/wujq/catkin_diff_gps/install/setup.bash
-/home/wujq/catkin_diff_gps/install/local_setup.bash
-/home/wujq/catkin_diff_gps/install/setup.sh
-/home/wujq/catkin_diff_gps/install/local_setup.sh
-/home/wujq/catkin_diff_gps/install/setup.zsh
-/home/wujq/catkin_diff_gps/install/local_setup.zsh
-/home/wujq/catkin_diff_gps/install/.rosinstall
